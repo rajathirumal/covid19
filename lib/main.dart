@@ -1,3 +1,4 @@
+import 'package:covid19/pages/home.dart';
 import 'package:flutter/material.dart';
 
 import 'drawer.dart';
@@ -18,13 +19,7 @@ class Covid19 extends StatelessWidget {
           color: Color.fromARGB(255, 51, 51, 51),
         ),
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Covid 19"),
-        ),
-        drawer: const CovidAppDrawer(),
-        body: Container(),
-      ),
+      home: const HomePage(),
     );
   }
 }
