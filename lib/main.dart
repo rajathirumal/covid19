@@ -19,7 +19,14 @@ class Covid19 extends StatelessWidget {
           color: Color.fromARGB(255, 51, 51, 51),
         ),
       ),
-      home: const HomePage(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("Covid 19"),
+        ),
+        drawer: const CovidAppDrawer(),
+        body: const HomePage(),
+        // body: Country(),
+      ),
     );
   }
 }
