@@ -1,8 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import '../source/data.source.dart';
+import '../source/moc.data.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,36 +11,31 @@ class HomePage extends StatefulWidget {
 }
 
 /// Task
-///  1. Display advisory banner
-/// 2.A Show world data - https://disease.sh/v3/covid-19/all
-/// TODO : 2.B Show only selected fields from API responce
-/// TODO: 3. Show top 5 Country Data - Let user pick ( cases, todayCases, deaths, recovered, active ) - https://disease.sh/v3/covid-19/countries?sort=deaths
+/// 1. Display advisory banner
+/// 2. Manipulation of Horizontal Scrolling List
+///   2.a Show world data - https://disease.sh/v3/covid-19/all
+///   2.c Show only selected fields from API responce
+///   2.d Let the user add the required fields to the horizontal scroll
+/// 3. Have a refresh icon above the top 10 list to refresh data in it
+/// 4. Show top 10 Country Data  - https://disease.sh/v3/covid-19/countries?sort=cases
+///   4.a Let user pick ( cases, todayCases, deaths, recovered, active )
+///   4.c When the user picks the sort criteria don't make API call, sort the local data - use below snippet
+///       top10Countries.sort((a, b) => (b["countryInfo"]["_id"]).compareTo(a["countryInfo"]["_id"]));
 ///
 class _HomePageState extends State<HomePage> {
-  Map<String, dynamic> mocData = {
-    "updated": 1644142080461,
-    "cases": 394491104,
-    "todayCases": 576450,
-    "deaths": 5753983,
-    "todayDeaths": 2109,
-    "recovered": 313286867,
-    "todayRecovered": 530096,
-    "active": 75450254,
-    "critical": 91285,
-    "casesPerOneMillion": 50610,
-    "deathsPerOneMillion": 738.2,
-    "tests": 5188386532,
-    "testsPerOneMillion": 658443.04,
-    "population": 7879780341,
-    "oneCasePerPeople": 0,
-    "oneDeathPerPeople": 0,
-    "oneTestPerPeople": 0,
-    "activePerOneMillion": 9575.17,
-    "recoveredPerOneMillion": 39758.32,
-    "criticalPerOneMillion": 11.58,
-    "affectedCountries": 225
-  };
-  Widget getCard(
+  var cardColors = [
+    Colors.redAccent,
+    Colors.blueAccent,
+    Colors.greenAccent,
+    Colors.yellowAccent,
+    Colors.pink,
+    Colors.amber,
+    Colors.deepPurple,
+    Colors.grey,
+  ];
+  var dataToShowHorizontalList = ["cases", "deaths", "recovered", "active"];
+  var sortCountryListBy = 'cases';
+  Widget getHorizontalCard(
           {required cardColor,
           required var dataValue,
           required String dataAttribute}) =>
@@ -60,22 +54,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Text(
-              dataAttribute,
+              dataAttribute[0].toUpperCase() +
+                  dataAttribute.substring(1).toLowerCase(),
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
         ),
       );
-  var cardColors = [
-    Colors.redAccent,
-    Colors.blueAccent,
-    Colors.greenAccent,
-    Colors.yellowAccent,
-    Colors.pink,
-    Colors.amber,
-    Colors.deepPurple,
-    Colors.grey,
-  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,28 +81,197 @@ class _HomePageState extends State<HomePage> {
                   fontSize: 16),
             ),
           ),
-          // Horizontal List for task 2
+          // Horizontal scrolling List for task 2
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: SizedBox(
               height: 200,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: mocData.length,
+                itemCount: dataToShowHorizontalList.length,
                 separatorBuilder: (context, _) => const SizedBox(width: 10),
                 itemBuilder: (context, index) {
                   int cardindex = (index > cardColors.length - 1)
                       ? index % cardColors.length
                       : index;
-                  return getCard(
+                  return getHorizontalCard(
                       cardColor: cardColors[cardindex],
-                      dataAttribute: mocData.keys.elementAt(index),
-                      dataValue: mocData.values.elementAt(index));
+                      dataAttribute: dataToShowHorizontalList[index],
+                      dataValue:
+                          MocData.worldData[dataToShowHorizontalList[index]]);
                 },
               ),
             ),
           ),
+          // Show:
+          // Text   = "Top 10 countries"
+          // Button = Refresh
+          // Button = Sort
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Top 10 countries",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 61, 58, 58),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text("Please wait while refresing"),
+                          action: SnackBarAction(
+                            label: "OK",
+                            onPressed: () {},
+                          ),
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.refresh_outlined,
+                        color: Color.fromARGB(255, 61, 58, 58),
+                        size: 30.0,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (context) => SimpleDialog(
+                            title: const Text("Sort by:"),
+                            children: <Widget>[
+                              ListTile(
+                                  title: const Text("Total cases"),
+                                  onTap: () =>
+                                      Navigator.pop(context, "Total cases")),
+                              ListTile(
+                                  title: const Text("Total Deths"),
+                                  onTap: () =>
+                                      Navigator.pop(context, "Deaths")),
+                              ListTile(
+                                  title: const Text("Active cases"),
+                                  onTap: () =>
+                                      Navigator.pop(context, "Active cases")),
+                            ],
+                          ),
+                        ).then(
+                          (selectedOption) {
+                            if (selectedOption != null) {
+                              setState(
+                                  () => sortCountryListBy = selectedOption);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text("you have clicked $selectedOption"),
+                                  action: SnackBarAction(
+                                    label: "OK",
+                                    onPressed: () {},
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.sort,
+                            color: Color.fromARGB(255, 61, 58, 58),
+                            size: 30.0,
+                          ),
+                          Text(
+                            sortCountryListBy,
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 61, 58, 58),
+                              fontSize: 15,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          // Top 10 countries ListView
+          Expanded(
+            child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) => top10CountriesCard(index),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget top10CountriesCard(int index) {
+    return Container(
+      margin: const EdgeInsets.all(8.0),
+      child: Card(
+        color: Colors.white,
+        child: Row(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 0.05,
+                      ),
+                    ),
+                    child: Image.network(
+                      MocData.top10Countries[index]["countryInfo"]["flag"],
+                      height: 50,
+                      width: 70,
+                      fit: BoxFit.fill,
+                      loadingBuilder: (context, child, progress) {
+                        return progress == null
+                            ? child
+                            : const CircularProgressIndicator.adaptive();
+                      },
+                      semanticLabel:
+                          'Flag of ${MocData.top10Countries[index]["country"]}',
+                    ),
+                  ),
+                  Text(MocData.top10Countries[index]["countryInfo"]["iso3"]),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('COUNTRY : ${MocData.top10Countries[index]["country"]}'),
+                  Text(
+                      'CASES        : ${MocData.top10Countries[index]["cases"]}'),
+                  Text(
+                      'DEATHS      : ${MocData.top10Countries[index]["deaths"]}'),
+                  Text(
+                      'ACTIVE CASES : ${MocData.top10Countries[index]["active"]}'),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
