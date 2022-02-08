@@ -13,9 +13,9 @@ class HomePage extends StatefulWidget {
 /// Task
 /// 1. Display advisory banner
 /// 2. Manipulation of Horizontal Scrolling List
-///   2.a Show world data - https://disease.sh/v3/covid-19/all
-///   2.c Show only selected fields from API responce
-///   2.d Let the user add the required fields to the horizontal scroll
+///   2.a Show world data - https://disease.sh/v3/covid-19/all - Done (Yet to implimented API call)
+///   2.c Show only selected fields from API responce - Done
+///   2.d Let the user add the required fields to the horizontal scroll - (Yet to give UI to pic fields)
 /// 3. Have a refresh icon above the top 10 list to refresh data in it
 /// 4. Show top 10 Country Data  - https://disease.sh/v3/covid-19/countries?sort=cases
 ///   4.a Let user pick ( cases, todayCases, deaths, recovered, active )
@@ -219,12 +219,55 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget top10CountriesCard(int index) {
+    return ListTile(
+      leading: Card(
+        elevation: 25,
+        child: Image.network(
+          MocData.top10Countries[index]["countryInfo"]["flag"],
+          height: 50,
+          width: 60,
+          fit: BoxFit.fill,
+          loadingBuilder: (context, child, progress) {
+            return progress == null
+                ? child
+                : const CircularProgressIndicator.adaptive();
+          },
+          semanticLabel: 'Flag of ${MocData.top10Countries[index]["country"]}',
+        ),
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('COUNTRY : ${MocData.top10Countries[index]["country"]}'),
+          Text('CASES        : ${MocData.top10Countries[index]["cases"]}'),
+          Text('DEATHS      : ${MocData.top10Countries[index]["deaths"]}'),
+          Text('ACTIVE CASES : ${MocData.top10Countries[index]["active"]}'),
+        ],
+      ),
+      trailing: Column(
+        children: [
+          Text(MocData.top10Countries[index]["countryInfo"]["iso3"]),
+          const Icon(
+            Icons.arrow_forward,
+            color: Color.fromARGB(255, 61, 58, 58),
+            size: 30.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget xtop10CountriesCard(int index) {
     return Container(
       margin: const EdgeInsets.all(8.0),
       child: Card(
         color: Colors.white,
         child: Row(
+          mainAxisSize: MainAxisSize.max,
           children: [
+            /// Column:
+            /// 1. Flag
+            /// 2. Country code
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
@@ -255,6 +298,9 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+
+            /// Column:
+            /// Country data
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -269,7 +315,20 @@ class _HomePageState extends State<HomePage> {
                       'ACTIVE CASES : ${MocData.top10Countries[index]["active"]}'),
                 ],
               ),
-            )
+            ),
+
+            /// Column:
+            /// Show more data icon
+            // Column(
+            //   crossAxisAlignment: CrossAxisAlignment.end,
+            //   children: const [
+            // Icon(
+            //   Icons.refresh_outlined,
+            //   color: Color.fromARGB(255, 61, 58, 58),
+            //   size: 30.0,
+            // ),
+            //   ],
+            // )
           ],
         ),
       ),
