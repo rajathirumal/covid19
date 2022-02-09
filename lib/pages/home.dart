@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:covid19/helper/extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../source/data.source.dart';
@@ -18,7 +17,7 @@ class HomePage extends StatefulWidget {
 ///   2.a Show world data - https://disease.sh/v3/covid-19/all - Done (Yet to implimented API call)
 ///   2.c Show only selected fields from API responce - Done
 ///   2.d Let the user add the required fields to the horizontal scroll - (Yet to give UI to pic fields)
-/// 3. Have a refresh icon above the top 10 list to refresh data in it - (Icon done yet to impliment functionality)
+/// 3. Have a refresh icon above the top 10 list to refresh data in it - (Icon done yet to impliment API call)
 /// 4. Show top 10 Country Data  - https://disease.sh/v3/covid-19/countries?sort=cases
 ///   4.a Let user pick either of cases, todayCases, deaths, recovered, active - (UI done, yet to impliment functionality)
 ///   4.c When the user picks the sort criteria don't make API call, sort the local data - use below snippet
@@ -37,6 +36,14 @@ class _HomePageState extends State<HomePage> {
   ];
   var dataToShowHorizontalList = ["cases", "deaths", "recovered", "active"];
   var sortCountryListBy = 'cases';
+  Map<String, bool?> checkBoxValue = {
+    "cases": true,
+    "deaths": true,
+    "recovered": true,
+    "active": true,
+    "population": false,
+    "tests": false,
+  };
   Widget getHorizontalCard(
           {required cardColor,
           required var dataValue,
@@ -51,8 +58,10 @@ class _HomePageState extends State<HomePage> {
             FittedBox(
               child: Text(
                 dataValue.toString(),
-                style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 31, 19, 19)),
               ),
             ),
             Text(
@@ -66,6 +75,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(dataToShowHorizontalList);
     List<Map<String, dynamic>> myData = MocData.top10Countries;
     return Scaffold(
       body: Column(
@@ -88,7 +98,6 @@ class _HomePageState extends State<HomePage> {
           // Show:
           // Text   = "All over the world"
           // Button = Add
-
           Padding(
             padding: const EdgeInsets.only(
                 left: 10.0, top: 5, bottom: 0, right: 10.0),
@@ -105,38 +114,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => {
-                    showDialog<String>(
-                      context: context,
-                      builder: (context) => SimpleDialog(
-                        title: const Text("Please select"),
-                        children: <Widget>[
-                          ListTile(
-                              title: const Text("Total cases"),
-                              onTap: () => Navigator.pop(context, "cases")),
-                          ListTile(
-                              title: const Text("Total Deths"),
-                              onTap: () => Navigator.pop(context, "deaths")),
-                          ListTile(
-                              title: const Text("Active cases"),
-                              onTap: () => Navigator.pop(context, "active")),
-                        ],
-                      ),
-                    ).then(
-                      (selectedOption) {
-                        if (selectedOption != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("you have clicked $selectedOption"),
-                              action: SnackBarAction(
-                                label: "OK",
-                                onPressed: () {},
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                    ),
+                  onTap: () async => {
+                    await showFielSelection(context),
                   },
                   child: const Icon(
                     Icons.add,
@@ -151,7 +130,7 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: SizedBox(
-              height: 200,
+              height: 150,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: dataToShowHorizontalList.length,
@@ -191,15 +170,13 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text("Please wait while refresing"),
-                          action: SnackBarAction(
-                            label: "OK",
-                            onPressed: () {},
-                          ),
-                        ),
-                      ),
+                      onTap: () {
+                        setState(() {
+                          sortCountryListBy = 'cases';
+                          myData.sort((a, b) => (b[sortCountryListBy])
+                              .compareTo(a[sortCountryListBy]));
+                        });
+                      },
                       child: const Icon(
                         Icons.refresh_outlined,
                         color: Color.fromARGB(255, 61, 58, 58),
@@ -233,20 +210,11 @@ class _HomePageState extends State<HomePage> {
                               setState(
                                 () {
                                   sortCountryListBy = selectedOption;
+
                                   myData.sort((a, b) => (b[selectedOption])
                                       .compareTo(a[selectedOption]));
                                 },
                               );
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   SnackBar(
-                              //     content:
-                              //         Text("you have clicked $selectedOption"),
-                              //     action: SnackBarAction(
-                              //       label: "OK",
-                              //       onPressed: () {},
-                              //     ),
-                              //   ),
-                              // );
                             }
                           },
                         );
@@ -259,8 +227,7 @@ class _HomePageState extends State<HomePage> {
                             size: 30.0,
                           ),
                           Text(
-                            sortCountryListBy[0].toUpperCase() +
-                                sortCountryListBy.substring(1).toLowerCase(),
+                            sortCountryListBy.extensionCapitalize(),
                             style: const TextStyle(
                               color: Color.fromARGB(255, 61, 58, 58),
                               fontSize: 15,
@@ -302,7 +269,7 @@ class _HomePageState extends State<HomePage> {
           elevation: 25,
           child: Image.network(
             countryData[index]["countryInfo"]["flag"],
-            height: 50,
+            height: 40,
             width: 60,
             fit: BoxFit.fill,
             loadingBuilder: (context, child, progress) {
@@ -353,6 +320,81 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> showFielSelection(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) => AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CheckboxListTile(
+                  title:
+                      Text(dataToShowHorizontalList[0].extensionCapitalize()),
+                  value: checkBoxValue["cases"],
+                  onChanged: (value) {},
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                CheckboxListTile(
+                  title:
+                      Text(dataToShowHorizontalList[1].extensionCapitalize()),
+                  onChanged: (value) {},
+                  value: checkBoxValue[dataToShowHorizontalList[1]],
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                CheckboxListTile(
+                  title:
+                      Text(dataToShowHorizontalList[2].extensionCapitalize()),
+                  onChanged: (value) {},
+                  value: checkBoxValue[dataToShowHorizontalList[2]],
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                CheckboxListTile(
+                  title:
+                      Text(dataToShowHorizontalList[3].extensionCapitalize()),
+                  onChanged: (value) {},
+                  value: checkBoxValue[dataToShowHorizontalList[3]],
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                CheckboxListTile(
+                  title: Text("population".extensionCapitalize()),
+                  onChanged: (value) {
+                    setState(() => checkBoxValue["population"] = value!);
+                  },
+                  value: checkBoxValue["population"],
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                CheckboxListTile(
+                  title: Text("tests".extensionCapitalize()),
+                  value: checkBoxValue["tests"],
+                  onChanged: (value) {
+                    setState(() => checkBoxValue["tests"] = value!);
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                child: const Text("Okay"),
+                onPressed: () {
+                  Map<String, bool?> tempchb = Map.from(checkBoxValue);
+                  tempchb.removeWhere((key, value) => value == false);
+                  print('tempchb:  ' '${tempchb.keys.toList()}');
+                  setState(
+                    () => dataToShowHorizontalList = tempchb.keys.toList(),
+                  );
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
