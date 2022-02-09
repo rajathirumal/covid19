@@ -147,19 +147,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-
-          // Container(
-          //   margin: const EdgeInsets.only(left: 10.0, top: 5, bottom: 0),
-          //   child: const Text(
-          //     "All over the world",
-          //     style: TextStyle(
-          //       color: Color.fromARGB(255, 61, 58, 58),
-          //       fontSize: 20,
-          //       fontWeight: FontWeight.bold,
-          //     ),
-          //   ),
-          // ),
-
           // Horizontal scrolling List for task 2
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -242,29 +229,24 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ).then(
                           (selectedOption) {
-                            // print(myData);
                             if (selectedOption != null) {
                               setState(
                                 () {
                                   sortCountryListBy = selectedOption;
-
-                                  // myData.sort((a, b) => (b["countryInfo"]
-                                  //         ["selectedOption"])
-                                  //     .compareTo(
-                                  //         a["countryInfo"]["selectedOption"]));
+                                  myData.sort((a, b) => (b[selectedOption])
+                                      .compareTo(a[selectedOption]));
                                 },
                               );
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text("you have clicked $selectedOption"),
-                                  action: SnackBarAction(
-                                    label: "OK",
-                                    onPressed: () {},
-                                  ),
-                                ),
-                              );
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(
+                              //     content:
+                              //         Text("you have clicked $selectedOption"),
+                              //     action: SnackBarAction(
+                              //       label: "OK",
+                              //       onPressed: () {},
+                              //     ),
+                              //   ),
+                              // );
                             }
                           },
                         );
