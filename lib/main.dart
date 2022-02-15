@@ -1,3 +1,4 @@
+import 'package:covid19/pages/country.dart';
 import 'package:covid19/pages/home.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,6 @@ class Covid19 extends StatelessWidget {
         ),
         drawer: const CovidAppDrawer(),
         body: const HomePage(),
-        // body: Country(),
       ),
     );
   }

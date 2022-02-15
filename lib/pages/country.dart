@@ -21,9 +21,13 @@ class _CountryState extends State<Country> {
       ),
       body: Column(
         children: [
-          Text(countryData.toString()),
-          Text(
-            countryData["showCountryPick"].toString(),
+          Visibility(
+            visible: countryData["showCountryPick"],
+            child: Text("Showing country picker"),
+          ),
+          Visibility(
+            visible: !countryData["showCountryPick"],
+            child: Text(countryData.toString()),
           )
         ],
       ),
