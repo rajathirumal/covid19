@@ -1,4 +1,5 @@
 import 'package:covid19/helper/extensions.dart';
+import 'package:covid19/pages/country.dart';
 import 'package:flutter/material.dart';
 
 import '../source/data.source.dart';
@@ -303,21 +304,32 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        trailing: Column(
-          children: [
-            const Icon(
-              Icons.arrow_forward,
-              color: Color.fromARGB(255, 61, 58, 58),
-              size: 30.0,
-            ),
-            Text(
-              countryData[index]["countryInfo"]["iso3"],
-              style: const TextStyle(
-                  color: Colors.blueAccent,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2.0),
-            ),
-          ],
+        trailing: GestureDetector(
+          onTap: () {
+            //call Country(countryData[index])
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => Country(countryData: countryData[index]),
+              ),
+            );
+            print(countryData[index]);
+          },
+          child: Column(
+            children: [
+              const Icon(
+                Icons.arrow_forward,
+                color: Color.fromARGB(255, 61, 58, 58),
+                size: 30.0,
+              ),
+              Text(
+                countryData[index]["countryInfo"]["iso3"],
+                style: const TextStyle(
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.0),
+              ),
+            ],
+          ),
         ),
       ),
     );
