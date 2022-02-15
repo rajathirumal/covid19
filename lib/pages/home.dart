@@ -307,12 +307,13 @@ class _HomePageState extends State<HomePage> {
         trailing: GestureDetector(
           onTap: () {
             //call Country(countryData[index])
+            countryData[index]["showCountryPick"] = false;
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => Country(countryData: countryData[index]),
               ),
             );
-            print(countryData[index]);
+            // print(countryData[index]["from"] = 'home.dart');
           },
           child: Column(
             children: [

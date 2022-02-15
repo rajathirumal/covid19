@@ -1,3 +1,4 @@
+import 'package:covid19/pages/country.dart';
 import 'package:flutter/material.dart';
 
 class CovidAppDrawer extends StatelessWidget {
@@ -25,6 +26,11 @@ class CovidAppDrawer extends StatelessWidget {
                   // ),
                   //
                   // Callin buildMenuItem() should be above this comment
+                  buildMenuItem(
+                    menutext: "COUNTRY",
+                    menuicon: Icons.stream_outlined,
+                    Onmenuitemclick: () => selectedItem(context, 1),
+                  ),
 
                   const SizedBox(height: 16),
                 ],
@@ -39,6 +45,7 @@ class CovidAppDrawer extends StatelessWidget {
   Widget buildMenuItem({
     required String menutext,
     required IconData menuicon,
+    required VoidCallback? Onmenuitemclick,
   }) {
     const color = Colors.white;
     const menuHoverColor = Colors.white70;
@@ -52,7 +59,20 @@ class CovidAppDrawer extends StatelessWidget {
         menutext,
         style: const TextStyle(color: color),
       ),
+      onTap: Onmenuitemclick,
       hoverColor: menuHoverColor,
     );
+  }
+
+  void selectedItem(BuildContext context, int itemIndex) {
+    Map<String, dynamic> ownContext = {"showCountryPick": true};
+    Navigator.of(context).pop();
+    switch (itemIndex) {
+      case 1:
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Country(countryData: ownContext)));
+        break;
+      default:
+    }
   }
 }
