@@ -1,6 +1,8 @@
 import 'package:covid19/pages/country.dart';
 import 'package:flutter/material.dart';
 
+import 'pages/history.dart';
+
 class CovidAppDrawer extends StatelessWidget {
   const CovidAppDrawer({Key? key}) : super(key: key);
 
@@ -30,6 +32,11 @@ class CovidAppDrawer extends StatelessWidget {
                     menutext: "COUNTRY",
                     menuicon: Icons.stream_outlined,
                     Onmenuitemclick: () => selectedItem(context, 1),
+                  ),
+                  buildMenuItem(
+                    menutext: "History",
+                    menuicon: Icons.stacked_line_chart_outlined,
+                    Onmenuitemclick: () => selectedItem(context, 2),
                   ),
 
                   const SizedBox(height: 16),
@@ -69,8 +76,18 @@ class CovidAppDrawer extends StatelessWidget {
     Navigator.of(context).pop();
     switch (itemIndex) {
       case 1:
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => Country(countryData: ownContext)));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) => Country(countryData: ownContext)),
+        );
+        break;
+
+      case 2:
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const History(),
+          ),
+        );
         break;
       default:
     }
