@@ -1,7 +1,12 @@
 import 'dart:ui';
 
 import 'package:covid19/helper/extensions.dart';
+import 'package:covid19/source/moc.data.dart';
 import 'package:flutter/material.dart';
+
+import 'package:dropdown_search/dropdown_search.dart';
+
+import '../source/data.source.dart';
 
 class Country extends StatefulWidget {
   Map<String, dynamic> countryData;
@@ -14,6 +19,7 @@ class Country extends StatefulWidget {
 /// Based on the data(bool) in countryData["showCountryPick"], decide wether to show country picking option
 class _CountryState extends State<Country> {
   Map<String, dynamic> countryData;
+
   _CountryState(this.countryData);
   final List<String> _countries = [
     "Afghanistan",
@@ -88,6 +94,26 @@ class _CountryState extends State<Country> {
                   child: Column(
                     children: [
                       //  create a drop down wit _countries data
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20.0, horizontal: 10.0),
+                        child: DropdownSearch<String>(
+                          mode: Mode.MENU,
+                          showSearchBox: true,
+                          items: DataSource.countryList,
+                          popupItemDisabled: (String s) => s.startsWith('I'),
+                          onChanged: (selectedCountry) {
+                            setState(() {
+                              countryData = MocData.top10Countries.firstWhere(
+                                (e) => e['country'] == selectedCountry,
+                                orElse: () => {},
+                              );
+                              countryData["showCountryPick"] = false;
+                            });
+                          },
+                          selectedItem: "Select country",
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -95,10 +121,10 @@ class _CountryState extends State<Country> {
             ),
           ),
           // when you come from home
-          Expanded(
-            child: Visibility(
-              visible: !countryData["showCountryPick"],
-              // child: Text(countryData.toString()),
+          // Expanded(
+          //   child:
+          if (!countryData["showCountryPick"])
+            Expanded(
               child: ListView(
                 children: [
                   Column(
@@ -137,7 +163,7 @@ class _CountryState extends State<Country> {
                 ],
               ),
             ),
-          ),
+          // ),
         ],
       ),
     );

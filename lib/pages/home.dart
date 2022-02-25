@@ -269,10 +269,13 @@ class _HomePageState extends State<HomePage> {
         leading: Card(
           elevation: 25,
           child: Image.network(
-            countryData[index]["countryInfo"]["flag"],
+            countryData[index]["countryInfo"]["flag"] ?? '',
             height: 40,
             width: 60,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
+            errorBuilder: (context, obj, stackTrace) {
+              return Icon(Icons.broken_image_outlined);
+            },
             loadingBuilder: (context, child, progress) {
               return progress == null
                   ? child
