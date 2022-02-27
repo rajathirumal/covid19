@@ -1,9 +1,8 @@
-import 'dart:html';
-
 import 'package:covid19/source/data.source.dart';
 import 'package:covid19/source/moc.data.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:syncfusion_officechart/officechart.dart';
 
 class History extends StatefulWidget {
   const History({Key? key}) : super(key: key);
@@ -27,6 +26,19 @@ class _HistoryState extends State<History> {
   }
 
   var dataForCountry = "";
+  int currentBottonNavItem = 0;
+
+  var screens = [
+    Center(
+      child: Text("Cases"),
+    ),
+    Center(
+      child: Text("Death"),
+    ),
+    Center(
+      child: Text("Recovered"),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -34,28 +46,57 @@ class _HistoryState extends State<History> {
       appBar: AppBar(
         title: const Text("History data"),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
-            child: DropdownSearch<String>(
-              mode: Mode.MENU,
-              showSearchBox: true,
-              items: DataSource.countryList,
-              popupItemDisabled: (String s) => s.startsWith('I'),
-              onChanged: (selectedItem) {
-                setState(() {
-                  dataForCountry = selectedItem!;
-                });
-              },
-              selectedItem: "Select country",
-            ),
+      body: dataForCountry == ""
+          ? Visibility(
+              visible: dataForCountry == "",
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 10.0),
+                child: DropdownSearch<String>(
+                  mode: Mode.MENU,
+                  showSearchBox: true,
+                  items: DataSource.countryList,
+                  onChanged: (selectedItem) {
+                    setState(() {
+                      dataForCountry = selectedItem!;
+                    });
+                  },
+                  selectedItem: "Select country",
+                ),
+              ),
+            )
+          : screens[currentBottonNavItem],
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 50,
+        currentIndex: currentBottonNavItem,
+        type: BottomNavigationBarType.shifting,
+        selectedItemColor: Colors.yellow,
+        onTap: (index) {
+          if (dataForCountry != "") {
+            setState(() {
+              var res = (MocData.historicData.firstWhere(
+                (element) => element["country"] == dataForCountry,
+              ))["timeline"];
+              currentBottonNavItem = index;
+            });
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people_outline_rounded),
+            label: "Cases",
+            backgroundColor: Colors.redAccent,
           ),
-          if (dataForCountry == "")
-            Text("Empty: " + dataForCountry)
-          else
-            Text("Country: " + dataForCountry)
+          BottomNavigationBarItem(
+            icon: Icon(Icons.personal_injury),
+            label: "Deaths",
+            backgroundColor: Colors.blueAccent,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.celebration),
+            label: "Recovered",
+            backgroundColor: Colors.green,
+          ),
         ],
       ),
     );

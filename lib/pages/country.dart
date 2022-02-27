@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:covid19/helper/extensions.dart';
 import 'package:covid19/source/moc.data.dart';
 import 'package:flutter/material.dart';
 
@@ -21,30 +18,7 @@ class _CountryState extends State<Country> {
   Map<String, dynamic> countryData;
 
   _CountryState(this.countryData);
-  final List<String> _countries = [
-    "Afghanistan",
-    "Albania",
-    "Algeria",
-    "Andorra",
-    "Angola",
-    "Antigua and Barbuda",
-    "Argentina",
-    "Armenia",
-    "Australia",
-    "Austria",
-    "Azerbaijan",
-    "Bahamas",
-    "Bahrain",
-    "Bangladesh",
-    "Barbados",
-    "Belarus",
-    "Belgium",
-    "Belize",
-    "Benin",
-    "Bhutan",
-    "Bolivia",
-    "Bosnia and Herzegovina",
-  ];
+
   final Map<String, dynamic> _whatToShow = {
     "active": {
       "icon": Icons.local_hospital,
