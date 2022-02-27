@@ -133,8 +133,11 @@ class _CountryState extends State<Country> {
                         shadowColor: Colors.red,
                         elevation: 300,
                         child: Image.network(
-                          countryData["countryInfo"]["flag"],
-                          fit: BoxFit.fill,
+                          countryData["countryInfo"]["flag"] ?? '',
+                          errorBuilder: (context, obj, stackTrace) {
+                            return const Icon(Icons.broken_image_outlined);
+                          },
+                          fit: BoxFit.cover,
                           loadingBuilder: (context, child, progress) {
                             return progress == null
                                 ? child
