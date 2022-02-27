@@ -274,7 +274,7 @@ class _HomePageState extends State<HomePage> {
             width: 60,
             fit: BoxFit.cover,
             errorBuilder: (context, obj, stackTrace) {
-              return Icon(Icons.broken_image_outlined);
+              return const Icon(Icons.broken_image_outlined);
             },
             loadingBuilder: (context, child, progress) {
               return progress == null

@@ -47,8 +47,7 @@ class _HistoryState extends State<History> {
                   dataForCountry = selectedItem!;
                 });
               },
-
-              // selectedItem: "Select country",
+              selectedItem: "Select country",
             ),
           ),
           Text(dataForCountry),
