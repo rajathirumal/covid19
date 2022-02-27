@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:covid19/source/data.source.dart';
 import 'package:covid19/source/moc.data.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +26,7 @@ class _HistoryState extends State<History> {
     super.initState();
   }
 
-  var dataForCountry = "India";
+  var dataForCountry = "";
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,10 @@ class _HistoryState extends State<History> {
               selectedItem: "Select country",
             ),
           ),
-          Text(dataForCountry),
+          if (dataForCountry == "")
+            Text("Empty: " + dataForCountry)
+          else
+            Text("Country: " + dataForCountry)
         ],
       ),
     );
