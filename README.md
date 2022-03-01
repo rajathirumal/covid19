@@ -6,6 +6,6 @@ An app for tracking Covid19 details
 
 This project is an implemetation of the following APIs:
 
-- [disease.sh - Open Disease Data API](https://disease.sh/)
+- [disease.sh - Open Disease Data API](https://disease.sh/) 
 
 
