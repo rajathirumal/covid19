@@ -13,9 +13,12 @@ class History extends StatefulWidget {
 
 /// Task
 /// 1.Oninit()
-/// 1.a Make API call https://disease.sh/v3/covid-19/historical?lastdays=30 and show data --> using moc data
-/// 1.b Let the user select the required country
-/// 2. Let user select number of days thatis to includeed in history
+///   1.a Make API call https://disease.sh/v3/covid-19/historical?lastdays=30 and show data --> using moc data
+///   1.b Let the user select the required country
+/// 2.Use bottm navigation bar - Cases, Deths, Recovery 
+///   2.a Based on the choice of nav item show page
+///   2.b In the page let the user select number of days to show data for. And then show chart
+///
 
 class _HistoryState extends State<History> {
   late List<Map<String, dynamic>> historydata;
