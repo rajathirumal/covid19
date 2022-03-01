@@ -13,7 +13,8 @@ class Country extends StatefulWidget {
   _CountryState createState() => _CountryState(countryData);
 }
 
-/// Based on the data(bool) in countryData["showCountryPick"], decide wether to show country picking option
+/// Task
+/// Based on the data(bool) in countryData["showCountryPick"], decide wether to show country picking option - done
 class _CountryState extends State<Country> {
   Map<String, dynamic> countryData;
 
