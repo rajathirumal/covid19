@@ -17,12 +17,12 @@ class HomePage extends StatefulWidget {
 /// 2. Manipulation of Horizontal Scrolling List
 ///   2.a Show world data - https://disease.sh/v3/covid-19/all - Done (Yet to implimented API call)
 ///   2.c Show only selected fields from API responce - Done
-///   2.d Let the user add the required fields to the horizontal scroll - (Yet to give UI to pic fields)
-/// 3. Have a refresh icon above the top 10 list to refresh data in it - (Icon done yet to impliment API call)
+///   2.d Let the user add the required fields to the horizontal scroll - (UI designed, not implimeted yet)
+/// 3. Have a refresh icon above the top 10 list to refresh data in it - (UI designed, not implimented API call)
 /// 4. Show top 10 Country Data  - https://disease.sh/v3/covid-19/countries?sort=cases
 ///   4.a Let user pick either of cases, todayCases, deaths, recovered, active - (UI done, yet to impliment functionality)
 ///   4.c When the user picks the sort criteria don't make API call, sort the local data - use below snippet
-///       top10Countries.sort((a, b) => (b["countryInfo"]["_id"]).compareTo(a["countryInfo"]["_id"]));
+///       top10Countries.sort((a, b) => (b["countryInfo"]["_id"]).compareTo(a["countryInfo"]["_id"])); - done
 ///
 class _HomePageState extends State<HomePage> {
   var cardColors = [
