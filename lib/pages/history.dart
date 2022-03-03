@@ -2,7 +2,10 @@ import 'package:covid19/source/data.source.dart';
 import 'package:covid19/source/moc.data.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:syncfusion_officechart/officechart.dart';
+
+import 'package:covid19/pages/history.cases.dart';
+import 'package:covid19/pages/history.deaths.dart';
+import 'package:covid19/pages/history.recover.dart';
 
 class History extends StatefulWidget {
   const History({Key? key}) : super(key: key);
@@ -14,8 +17,8 @@ class History extends StatefulWidget {
 /// Task
 /// 1.Oninit()
 ///   1.a Make API call https://disease.sh/v3/covid-19/historical?lastdays=30 and show data --> using moc data
-///   1.b Let the user select the required country
-/// 2.Use bottm navigation bar - Cases, Deths, Recovery 
+///   1.b Let the user select the required country- done
+/// 2.Use bottm navigation bar - Cases, Deths, Recovery
 ///   2.a Based on the choice of nav item show page
 ///   2.b In the page let the user select number of days to show data for. And then show chart
 ///
@@ -30,18 +33,7 @@ class _HistoryState extends State<History> {
 
   var dataForCountry = "";
   int currentBottonNavItem = 0;
-
-  var screens = [
-    Center(
-      child: Text("Cases"),
-    ),
-    Center(
-      child: Text("Death"),
-    ),
-    Center(
-      child: Text("Recovered"),
-    ),
-  ];
+  late Map<String, int> dataOnPage;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +60,14 @@ class _HistoryState extends State<History> {
                 ),
               ),
             )
-          : screens[currentBottonNavItem],
+          // : screens[currentBottonNavItem],
+          : currentBottonNavItem == 0
+              ? Cases(dataForCountry)
+              : currentBottonNavItem == 1
+                  ? Deaths(dataForCountry)
+                  : currentBottonNavItem == 2
+                      ? Recover(dataForCountry)
+                      : Cases(dataForCountry),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 50,
         currentIndex: currentBottonNavItem,
@@ -77,9 +76,6 @@ class _HistoryState extends State<History> {
         onTap: (index) {
           if (dataForCountry != "") {
             setState(() {
-              var res = (MocData.historicData.firstWhere(
-                (element) => element["country"] == dataForCountry,
-              ))["timeline"];
               currentBottonNavItem = index;
             });
           }
