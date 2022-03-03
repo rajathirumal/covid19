@@ -3,9 +3,9 @@ import 'package:covid19/source/moc.data.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
-import 'package:covid19/pages/history.cases.dart';
-import 'package:covid19/pages/history.deaths.dart';
-import 'package:covid19/pages/history.recover.dart';
+import 'package:covid19/pages/history.pages/history.cases.dart';
+import 'package:covid19/pages/history.pages/history.deaths.dart';
+import 'package:covid19/pages/history.pages/history.recover.dart';
 
 class History extends StatefulWidget {
   const History({Key? key}) : super(key: key);

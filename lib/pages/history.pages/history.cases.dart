@@ -19,7 +19,7 @@ class _CasesState extends State<Cases> {
       (element) => element["country"] == dataForCountry,
     ))["timeline"]["cases"];
     return Center(
-      child: Text("Cases"),
+      child: Text("Cases" + dataOnPage.toString()),
     );
   }
 }

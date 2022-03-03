@@ -16,6 +16,7 @@ class _RecoverState extends State<Recover> {
 
   @override
   Widget build(BuildContext context) {
+    
     var dataOnPage = (MocData.historicData.firstWhere(
       (element) => element["country"] == dataForCountry,
     ))["timeline"]["recovered"];
