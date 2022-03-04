@@ -18,7 +18,7 @@ class _DeathsState extends State<Deaths> {
       (element) => element["country"] == dataForCountry,
     ))["timeline"]["deaths"];
     return Center(
-      child: Text("Death"),
+      child: Text("Deaths" + dataOnPage.toString()),
     );
   }
 }

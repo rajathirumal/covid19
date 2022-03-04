@@ -60,7 +60,6 @@ class _HistoryState extends State<History> {
                 ),
               ),
             )
-          // : screens[currentBottonNavItem],
           : currentBottonNavItem == 0
               ? Cases(dataForCountry)
               : currentBottonNavItem == 1
