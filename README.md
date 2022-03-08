@@ -17,5 +17,5 @@ This project is an implemetation of the following APIs:
 
 ## App screens
 
-<img src="screenshots/HomePage.jpg" width="200" />
+<img src="screenshots/HomePage.jpg" width="200"/>
 <img src="screenshots/CountryDetailsPage.jpg" width="200"/>
