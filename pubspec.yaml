@@ -41,7 +41,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   dropdown_search: ^2.0.1
-  charts_flutter: ^0.12.0
+  syncfusion_flutter_charts: ^19.4.55
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
