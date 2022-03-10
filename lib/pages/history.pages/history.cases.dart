@@ -64,10 +64,12 @@ class _CasesState extends State<Cases> {
     ))["timeline"]["cases"];
 
     List<CasesData> CaseDataList = [];
-    for (var d in dataOnPage.keys) {
-      num caseCount = dataOnPage[d] ?? 0;
+    for (var c in dataOnPage.keys) {
+      num caseCount = dataOnPage[c] ?? 0;
       caseCount = caseCount / 1000;
-      CaseDataList.add(CasesData(int.parse(d.split("/")[1]), caseCount));
+      CaseDataList.add(
+        CasesData(int.parse(c.split("/")[1]), caseCount),
+      );
     }
     return CaseDataList;
   }
