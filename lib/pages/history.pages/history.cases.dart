@@ -14,6 +14,7 @@ class Cases extends StatefulWidget {
 class _CasesState extends State<Cases> {
   late List<CasesData> _caseData;
   late TooltipBehavior _tooltipBehavior;
+  late Map<String, int> dataOnPage;
   String dataForCountry;
 
   @override
@@ -31,12 +32,14 @@ class _CasesState extends State<Cases> {
       child: SafeArea(
         child: Scaffold(
           body: SfCartesianChart(
-            title: ChartTitle(text: "Number of cases"),
+            title: ChartTitle(
+                text:
+                    "Number of cases on the year 20${dataOnPage.keys.first.split("/")[2]}"),
             tooltipBehavior: _tooltipBehavior,
             series: <ChartSeries>[
               LineSeries<CasesData, int>(
                   name: "Number of cases",
-                  dataLabelSettings: DataLabelSettings(isVisible: true),
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
                   enableTooltip: true,
                   dataSource: _caseData,
                   xValueMapper: (CasesData cd, _) => cd.date,
@@ -56,7 +59,7 @@ class _CasesState extends State<Cases> {
   }
 
   List<CasesData> getCaseData() {
-    Map<String, int> dataOnPage = (MocData.historicData.firstWhere(
+    dataOnPage = (MocData.historicData.firstWhere(
       (element) => element["country"] == dataForCountry,
     ))["timeline"]["cases"];
 
