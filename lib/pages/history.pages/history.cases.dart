@@ -34,7 +34,7 @@ class _CasesState extends State<Cases> {
           body: SfCartesianChart(
             title: ChartTitle(
                 text:
-                    "Number of cases on the year 20${dataOnPage.keys.first.split("/")[2]}"),
+                    "Number of cases on the year 20${dataOnPage.keys.first.split("/")[2]}\n ${dataForCountry}"),
             tooltipBehavior: _tooltipBehavior,
             series: <ChartSeries>[
               LineSeries<CasesData, int>(
