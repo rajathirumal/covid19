@@ -15,7 +15,16 @@ This project is an implemetation of the following APIs:
 | dropdown_search | ^2.0.1  |
 |syncfusion_flutter_charts| |^19.4.55|
 
-## App screens
 
+<details><summary>App screens</summary>
+<p>
+
+#### Home Screen
 <img src="screenshots/HomePage.jpg" width="200"/>
+  
+#### Counrtry Details
 <img src="screenshots/CountryDetailsPage.jpg" width="200"/>
+
+
+</p>
+</details>
