@@ -13,7 +13,7 @@ This project is an implemetation of the following APIs:
 | Dependency name  | Version used |
 | ------------- | ------------- |
 | dropdown_search | ^2.0.1  |
-|syncfusion_flutter_charts| |^19.4.55|
+|syncfusion_flutter_charts| ^19.4.55 |
 
 
 <details>
